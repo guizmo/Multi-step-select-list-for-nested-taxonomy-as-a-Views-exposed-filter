@@ -1,0 +1,4 @@
+name = City select filter
+description = Ajoute le form element de selection de ville et quartier (conditionnal)
+package = "Custom Modules"
+core = 7.x

@@ -1,0 +1,76 @@
+<?php
+ 
+
+function city_select_filter_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+// find your form id
+//drupal_set_message($form['#id']);
+
+
+	$path = drupal_get_path('module', 'city_select_filter');
+	
+	
+	if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-bien-immobilier-page-1') {
+		
+		drupal_add_js($path . '/city_select_filter.js',  array('weight' => 1));
+		
+		unset($form['localisation']);
+		$form['localisation'] = array(
+			'#type' => 'select',
+			//'#title' => t('Pays, villes, quartiers'),
+			'#options' => city_select_filter_opts(),
+		);
+	
+	}
+	
+	
+	if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-bien-immobilier-page-2') {
+		
+		drupal_add_js($path . '/city_select_filter.js',  array('weight' => 1));
+		
+		// I don't put the title because i am replacing an existing select box and use the original title
+		unset($form['localisation_2']);
+		$form['localisation_2'] = array(
+			'#type' => 'select',
+			//'#title' => t('Pays, villes, quartiers'),
+			'#options' => city_select_filter_opts(),
+		);
+	
+	}
+    
+}
+
+
+function city_select_filter_opts() {
+	//get your vocabulary (14 = id)
+	$taxos = taxonomy_get_tree(14);
+	$taxoArray = array();
+	
+	foreach($taxos as $taxo){
+	
+		$tid = $taxo->tid;
+		
+		//for each terms I get the parent tree
+		$taxoParentArray = taxonomy_get_parents_all($tid);
+		//reverse the order so top most parent is first and actual term is last
+		$taxoParentArray = array_reverse($taxoParentArray);
+		
+		$count = count($taxoParentArray);
+		$i = 0;
+		$sep = ' > ';
+		$parentsName = '';
+		foreach($taxoParentArray as $taxoParent){
+			if(++$i === $count){
+				$sep = '';
+			}
+			$parentsName .= $taxoParent->name . $sep;
+		}
+		
+		//build my new options array 
+		$taxoArray['All'] = "-All-";
+		$taxoArray[$tid] = $parentsName;
+	
+	}
+	
+	return $taxoArray;
+
+}
