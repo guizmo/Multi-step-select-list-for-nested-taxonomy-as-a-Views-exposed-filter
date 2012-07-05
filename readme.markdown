@@ -3,7 +3,7 @@
 
 ## Overview
 
-This module is barely a module but more an exemple of a quick fix solution and I welcome anyone to make this better.
+This is barely a module but more an exemple of a quick fix solution and I welcome anyone to make this better.
 On my form i had to modify 2 select lists so i left both forms in this exemple
 This is not a plug'n play solution, you will have to go into the module files to change a few things:
 
